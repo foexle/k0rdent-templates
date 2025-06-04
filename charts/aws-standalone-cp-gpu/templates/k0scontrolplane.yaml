@@ -21,7 +21,7 @@ spec:
         api:
           extraArgs:
             anonymous-auth: "true"
-            {{- if and (.Values.k0s.auth) (.Values.k0s.auth.enabled) }}Add commentMore actions
+            {{- if and (.Values.k0s.auth) (.Values.k0s.auth.enabled) }}
             authentication-config: "/etc/k0s/auth/auth-config.yaml"
             {{- end }}
           {{- with .Values.k0s.api.extraArgs }}
