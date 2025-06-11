@@ -227,7 +227,7 @@
           ]
         },
         "number": {
-          "description": "The number of the control plane machines",
+          "description": "The number of the GPU machines",
           "type": "number",
           "minimum": 0
         },
@@ -307,7 +307,7 @@
       ]
     },
     "ingress": {
-      "description": "The configuration of the control plane machines",
+      "description": "The configuration of the ingress machines",
       "properties": {
         "amiID": {
           "description": "The ID of Amazon Machine Image",
@@ -316,7 +316,7 @@
           ]
         },
         "number": {
-          "description": "The number of the control plane machines",
+          "description": "The number of the ingress machines",
           "type": "number",
           "minimum": 0
         },

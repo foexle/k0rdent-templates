@@ -4,7 +4,7 @@ kind: K0sControlPlane
 metadata:
   name: {{ include "k0scontrolplane.name" . }}
 spec:
-  replicas: {{ .Values.controlPlaneNumber }}
+  replicas: {{ .Values.controlPlane.number }}
   version: {{ .Values.k0s.version }}
   k0sConfigSpec:
     {{- if $global.k0sURL }}
