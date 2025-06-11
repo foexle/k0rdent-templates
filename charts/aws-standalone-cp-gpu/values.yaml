@@ -76,7 +76,8 @@ gpu:
 # K0s parameters
 k0s:
   version: v1.31.5+k0s.0
-
+  api: # @schema description: Kubernetes API server parameters; type: object
+    extraArgs: {} # @schema description: Map of key-values (strings) for any extra arguments to pass down to Kubernetes api-server process; type: object; additionalProperties: true
 # extensions defines custom Helm and image repositories to use for pulling
 # k0s extensions.
 extensions:
