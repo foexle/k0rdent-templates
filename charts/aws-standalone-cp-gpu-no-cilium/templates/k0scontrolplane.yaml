@@ -15,34 +15,34 @@ spec:
       - --enable-cloud-provider
       - --kubelet-extra-args="--cloud-provider=external"
       - --disable-components=konnectivity-server
-    {{- $auth := .Values.k0s.auth }}
-    {{- $files := .Values.k0s.files }}
-    {{- if or (and $auth $auth.enabled) $files $global.registryCertSecret $global.k0sURLCertSecret }}
-    files:
-    {{- if and $auth $auth.enabled }}
-    - content: | {{ toYaml $auth.config | nindent 8 }}
-      permissions: "0644"
-      path: /etc/k0s/auth/auth-config.yaml
-    {{- end }}
-    {{- range $file := $files }}
-    - {{ toYaml $file | trim | nindent 6 }}
-    {{- end }}
-    {{- end }}
-    {{- $certs := dict "registry.crt" $global.registryCertSecret "k0s-url.crt" $global.k0sURLCertSecret }}
-    {{- range $path, $secret := $certs }}
-    {{- if $secret }}
-    - contentFrom:
-        secretRef:
-          name: {{ $secret }}
-          key: tls.crt
-      permissions: "0664"
-      path: /usr/local/share/ca-certificates/{{ $path }}
-    {{- end }}
-    {{- end }}
-    {{- if or $global.registryCertSecret $global.k0sURLCertSecret }}
-    preStartCommands:
-    - "sudo update-ca-certificates"
-    {{- end }}
+    # {{- $auth := .Values.k0s.auth }}
+    # {{- $files := .Values.k0s.files }}
+    # {{- if or (and $auth $auth.enabled) $files $global.registryCertSecret $global.k0sURLCertSecret }}
+    # files:
+    # {{- if and $auth $auth.enabled }}
+    # - content: | {{ toYaml $auth.config | nindent 8 }}
+    #   permissions: "0644"
+    #   path: /etc/k0s/auth/auth-config.yaml
+    # {{- end }}
+    # {{- range $file := $files }}
+    # - {{ toYaml $file | trim | nindent 6 }}
+    # {{- end }}
+    # {{- end }}
+    # {{- $certs := dict "registry.crt" $global.registryCertSecret "k0s-url.crt" $global.k0sURLCertSecret }}
+    # {{- range $path, $secret := $certs }}
+    # {{- if $secret }}
+    # - contentFrom:
+    #     secretRef:
+    #       name: {{ $secret }}
+    #       key: tls.crt
+    #   permissions: "0664"
+    #   path: /usr/local/share/ca-certificates/{{ $path }}
+    # {{- end }}
+    # {{- end }}
+    # {{- if or $global.registryCertSecret $global.k0sURLCertSecret }}
+    # preStartCommands:
+    # - "sudo update-ca-certificates"
+    # {{- end }}
     k0s:
       apiVersion: k0s.k0sproject.io/v1beta1
       kind: ClusterConfig
@@ -86,6 +86,8 @@ spec:
             repositories:
               - name: mirantis
                 url: https://charts.mirantis.com
+              - name: aws-cloud-controller-manager
+                url: https://kubernetes.github.io/cloud-provider-aws              
               - name: aws-ebs-csi-driver
                 url: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
             {{- end }}
@@ -95,9 +97,9 @@ spec:
                 {{- if $global.registry }}
                 chartname: oci://{{ $global.registry }}/charts/aws-cloud-controller-manager
                 {{- else }}
-                chartname: mirantis/aws-cloud-controller-manager
+                chartname: aws-cloud-controller-manager/aws-cloud-controller-manager
                 {{- end }}
-                version: "0.0.9"
+                version: "0.0.8"
                 values: |
                   nodeSelector:
                     node-role.kubernetes.io/control-plane: "true"
